@@ -4,19 +4,23 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const path = require('path');
 const app = express();
+require('dotenv').config();
+
+//Database migration
+// const model = require('./model/model');
 
 const {getHomePage} = require('./routes/index');
-const {addPlayerPage, addPlayer, deletePlayer, editPlayer, editPlayerPage} = require('./routes/player');
+const player = require('./routes/player');
 const port = 5000;
 
 // create connection to database
 // the mysql.createConnection function takes in a configuration object which contains host, user, password and the database name.
 const db = mysql.createConnection ({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'training_nodejs',
-    port: 3306
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT
 });
 
 // connect to database
@@ -39,11 +43,11 @@ app.use(fileUpload()); // configure fileupload
 
 // routes for the app
 app.get('/', getHomePage);
-app.get('/add', addPlayerPage);
-app.get('/edit/:id', editPlayerPage);
-app.get('/delete/:id', deletePlayer);
-app.post('/add', addPlayer);
-app.post('/edit/:id', editPlayer);
+app.get('/add', player.addPlayerPage);
+// app.get('/edit/:id', player.editPlayerPage);
+// app.get('/delete/:id', player.deletePlayer);
+// app.post('/add', player.addPlayer);
+// app.post('/edit/:id', player.editPlayer);
 
 // set the app to listen on the port
 app.listen(port, () => {

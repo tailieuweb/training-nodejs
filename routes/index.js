@@ -1,16 +1,22 @@
-module.exports = {
-    getHomePage: (req, res) => {
-        let query = "SELECT * FROM `players` ORDER BY id ASC"; // query database to get all the players
+const db = require('../models/index');
+const User = db.user;
 
-        // execute query
-        db.query(query, (err, result) => {
-            if (err) {
-                res.redirect('/');
-            }
+const getHomePage = (req, res) => {
+
+    User.findAll({ limit: 10 }).then(function(projects) {
+       
             res.render('index.ejs', {
-                title: "Welcome to Socka | View Players"
-                ,players: result
+                title: "Welcome to Socka | View Players",
+                players: projects
             });
         });
-    },
+    };
+
+    // res.render('index.ejs', {
+    //     title: "Welcome to Socka | View Players"
+    //     ,players: result
+    // });
+
+module.exports = {
+    getHomePage
 };

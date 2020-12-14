@@ -1,13 +1,13 @@
 const fs = require('fs');
 
-module.exports = {
-    addPlayerPage: (req, res) => {
+const addPlayerPage = (req, res) => {
         res.render('add-player.ejs', {
             title: "Welcome to Socka | Add a new player"
             ,message: ''
         });
-    },
-    addPlayer: (req, res) => {
+    };
+
+const addPlayer = (req, res) => {
         if (!req.files) {
             return res.status(400).send("No files were uploaded.");
         }
@@ -62,8 +62,9 @@ module.exports = {
                 }
             }
         });
-    },
-    editPlayerPage: (req, res) => {
+    };
+
+const editPlayerPage = (req, res) => {
         let playerId = req.params.id;
         let query = "SELECT * FROM `players` WHERE id = '" + playerId + "' ";
         db.query(query, (err, result) => {
@@ -76,8 +77,9 @@ module.exports = {
                 ,message: ''
             });
         });
-    },
-    editPlayer: (req, res) => {
+    };
+
+const editPlayer = (req, res) => {
         let playerId = req.params.id;
         let first_name = req.body.first_name;
         let last_name = req.body.last_name;
@@ -91,8 +93,9 @@ module.exports = {
             }
             res.redirect('/');
         });
-    },
-    deletePlayer: (req, res) => {
+    };
+
+const deletePlayer = (req, res) => {
         let playerId = req.params.id;
         let getImageQuery = 'SELECT image from `players` WHERE id = "' + playerId + '"';
         let deleteUserQuery = 'DELETE FROM players WHERE id = "' + playerId + '"';
@@ -116,5 +119,12 @@ module.exports = {
                 });
             });
         });
-    }
-};
+    };
+
+module.exports = {
+    addPlayerPage,
+    addPlayer,
+    editPlayerPage,
+    editPlayer,
+    deletePlayer
+}
